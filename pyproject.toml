@@ -1,0 +1,28 @@
+[project]
+name = "nplserver"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Kelvin Fiifi Nketia-Achiampong",email = "achiampongk22@gmail.com"}
+]
+readme = "README.md"
+requires-python = "<3.13,>=3.10"
+dependencies = [
+    "fastapi (>=0.115.12,<0.116.0)",
+    "gunicorn (>=23.0.0,<24.0.0)",
+    "pyaudio (>=0.2.14,<0.3.0)",
+    "coqui-tts (>=0.26.0,<0.27.0)",
+    "stream2sentence (>=0.3.1,<0.4.0)",
+    "pydub (>=0.25.1,<0.26.0)",
+    "resampy (>=0.4.3,<0.5.0)"
+]
+
+packages = [
+    { include = "routes", from = "src" },
+    { include = "services", from = "src" },
+    { include = "models", from = "src" },
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
