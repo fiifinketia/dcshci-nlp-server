@@ -13,6 +13,7 @@ class Voice:
     language: str
     gender: Optional[str] = None
     model: str = ""
+    path: str = ""
 
 
 @dataclass

@@ -31,30 +31,30 @@ CORS_ORIGINS = [
     "https://127.0.0.1",
 ]
 
-# TTS Engine Settings
-DEFAULT_ENGINE = "coqui"
-SUPPORTED_ENGINES = ["coqui"]
 
 # Audio Configuration
 DEFAULT_AUDIO_FORMAT = "wav"
 DEFAULT_SAMPLE_RATE = 22050
 DEFAULT_CHANNELS = 1
 
-# Coqui Engine Settings
-COQUI_MODELS = {
+# Coqui TTS Models Settings
+DEFAULT_MODEL = "aka_as"
+SUPPORTED_MODELS = {
     "aka_as": {
-        "default": "/workspaces/dcshci-nlp-server/assets/asante-twi",
+        "path": "/Users/bytlabs/dcshci/dcshci-nlp-server/assets/models/bibletts",
+        "language": "twi_asante",
         "voices": [
-            ["Kwame","/workspaces/dcshci-nlp-server/assets/voices/Kwame.wav"],
-            ["Kweku", "/workspaces/dcshci-nlp-server/assets/voices/Kweku.wav"]
-        ]
+            [
+                "Kwame",
+                "/Users/bytlabs/dcshci/dcshci-nlp-server/assets/voices/Kwame.wav",
+            ],
+            [
+                "Kweku",
+                "/Users/bytlabs/dcshci/dcshci-nlp-server/assets/voices/Kweku.wav",
+            ],
+        ],
     }
 }
-
-
-# Default language and model
-DEFAULT_LANGUAGE = "aka_as"
-DEFAULT_MODEL = COQUI_MODELS[DEFAULT_LANGUAGE]["default"]
 
 # Advanced TTS settings
 DEFAULT_TOKENIZER = "nltk"

@@ -21,7 +21,6 @@ import os
 import re
 
 
-
 # Define a meta class that will automatically call the BaseEngine's __init__ method
 # and also the post_init method if it exists.
 class BaseInitMeta(ABCMeta):
@@ -473,7 +472,7 @@ class CoquiEngine(BaseEngine):
         sys.stderr = QueueWriter(output_queue)
 
         from TTS.tts.utils.speakers import SpeakerManager
-        
+
         tts = None
 
         logging.basicConfig(format="CoquiEngine: %(message)s", level=loglevel)
@@ -510,25 +509,12 @@ class CoquiEngine(BaseEngine):
 
                     time.sleep(TIME_SLEEP_DEVICE_RESET)
 
-                torch.set_num_threads(int(str(thread_count)))
-                torch_device = torch.device(
-                    "cuda"
-                    if device == "cuda" and torch.cuda.is_available()
-                    else "mps"
-                    if device == "mps"
-                    and torch.backends.mps.is_available()
-                    and torch.backends.mps.is_built()
-                    else "cuda"
-                    if torch.cuda.is_available()
-                    else "cpu"
-                )
-
                 model_path = os.path.join(checkpoint, "model.pth")
                 config_path = os.path.join(checkpoint, "config.json")
                 tts_speakers_file = os.path.join(checkpoint, "speakers.pth")
 
                 # TODO: Implement custom vocoders
-                
+
                 tts = Synthesizer(
                     tts_checkpoint=model_path,
                     tts_config_path=config_path,
@@ -540,13 +526,12 @@ class CoquiEngine(BaseEngine):
                     # encoder_config=None,
                     use_cuda=torch.cuda.is_available(),
                 )
-                
+
                 logging.debug(f" load_checkpoint({checkpoint})")
             except Exception as e:
                 print(f"Error loading model for checkpoint {checkpoint}: {e}")
                 raise
             return tts
-
 
         def tts_stream(
             tts,
@@ -602,24 +587,23 @@ class CoquiEngine(BaseEngine):
                 **kwargs,
             )
             full_wav = np.array(full_wav)
-            
+
             # Determine the total length of the waveform.
             total_length = full_wav.shape[-1]
             start = 0
-        
+
             # Iterate over the waveform and yield successive chunks.
             while start < total_length:
                 end = start + stream_chunk_size
                 # Slice out the current chunk.
                 chunk = full_wav[..., start:end]
                 yield chunk
-        
+
                 # Advance the start index. If overlap is desired, subtract overlap length.
                 if overlap_wav_len > 0:
                     start += (stream_chunk_size - overlap_wav_len)
                 else:
                     start += stream_chunk_size
-
 
         def get_user_data_dir(appname):
             TTS_HOME = os.environ.get("TTS_HOME")

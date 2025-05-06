@@ -16,14 +16,17 @@ from schemas import (
 )
 from services import TTSService
 
-# Service instance
-tts_service = TTSService()
 
-
-# Dependency to get the TTS service
 def get_tts_service():
-    """Get the TTS service instance."""
-    return tts_service
+    """Get or create the TTS service instance."""
+    # Use a singleton pattern or global variable to ensure a single instance
+    global _tts_service
+    try:
+        _tts_service
+    except NameError:
+        _tts_service = TTSService()
+    return _tts_service
+
 
 tts_router = APIRouter()
 
@@ -357,15 +360,15 @@ def set_model(
 
 
 @tts_router.post(
-    "/synthesize/aka_as",
+    "/synthesize",
     summary="Synthesize text to speech",
     description="Synthesizes text to speech and returns audio data",
     responses={
         200: {"description": "Audio data", "content": {"audio/wav": {}}},
         400: {"model": ErrorResponse, "description": "Invalid request"},
         500: {"model": ErrorResponse, "description": "Server error"},
-        503: {"model": ErrorResponse, "description": "Service unavailable"}
-    }
+        503: {"model": ErrorResponse, "description": "Service unavailable"},
+    },
 )
 def synthesize_text(
     request: TTSRequest,
